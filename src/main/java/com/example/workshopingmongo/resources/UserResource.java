@@ -1,5 +1,6 @@
 package com.example.workshopingmongo.resources;
 
+import com.example.workshopingmongo.dto.UserDto;
 import com.example.workshopingmongo.services.UserService;
 import domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -23,8 +25,9 @@ public class UserResource {
 
     //@RequestMapping(method= RequestMethod.GET)
     @GetMapping
-    public ResponseEntity<List<User>> findAll(){
+    public ResponseEntity<List<UserDto>> findAll(){
         List<User> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        List<UserDto> listDto = list.stream().map(UserDto::new).toList();
+        return ResponseEntity.ok().body(listDto);
     }
 }
