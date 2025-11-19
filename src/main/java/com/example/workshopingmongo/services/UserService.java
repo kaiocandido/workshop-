@@ -6,7 +6,6 @@ import com.example.workshopingmongo.services.execption.ObjectNotFoundExcepion;
 import domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -36,5 +35,18 @@ public class UserService {
     public void delete(String id){
         userRepository.findById(id);
         userRepository.deleteById(id);
+    }
+
+    public void update(User obj){
+        User newObj = userRepository.findById(obj.getId())
+                .orElseThrow(() -> new ObjectNotFoundExcepion("Objeto não encontrado. ID: " + obj.getId()));
+
+        updateData(newObj, obj);
+        userRepository.save(newObj);
+    }
+
+    public void updateData(User newObj, User obj){
+        newObj.setName(obj.getName());
+        newObj.setEmail(obj.getEmail());
     }
 }
