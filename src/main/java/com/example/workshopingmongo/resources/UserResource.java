@@ -5,6 +5,7 @@ import com.example.workshopingmongo.services.UserService;
 import domain.User;
 import jakarta.servlet.Servlet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,5 +53,11 @@ public class UserResource {
                 .buildAndExpand(obj.getId())
                 .toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable String id){
+       service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
