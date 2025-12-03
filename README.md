@@ -55,3 +55,109 @@ Esta API demonstra os fundamentos do desenvolvimento backend em Java com Spring 
 
 ## Entidade Post
 
+```java
+@Entity
+public class Post {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String titulo;
+    private String conteudo;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comentario> comentarios;
+}
+
+
+@Entity
+public class Comentario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String autor;
+    private String mensagem;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+}
+
+
+
+Endpoints da API
+Posts
+Metodo	Rota	Descricao
+POST	/posts	Criar post
+GET	/posts	Listar todos os posts
+GET	/posts/{id}	Buscar post por ID
+Comentarios
+Metodo	Rota	Descricao
+POST	/posts/{idPost}/comentarios	Criar comentario vinculado a um post
+GET	/posts/{idPost}/comentarios	Listar comentarios de um post
+GET	/comentarios/{id}	Buscar comentario por ID
+Exemplos de Requisição
+Criar Post
+{
+  "titulo": "Meu primeiro post",
+  "conteudo": "Conteudo do post"
+}
+
+Criar Comentario
+{
+  "autor": "Tavares",
+  "mensagem": "Excelente conteudo"
+}
+
+Listar Comentarios de um Post
+[
+  {
+    "id": 1,
+    "autor": "Tavares",
+    "mensagem": "Excelente conteudo",
+    "post": 1
+  }
+]
+
+Como Executar o Projeto
+
+Clonar o repositorio:
+
+git clone https://github.com/seu-usuario/workshop-posts-comments.git
+
+
+Entrar na pasta do projeto:
+
+cd workshop-posts-comments
+
+
+Rodar o projeto com Maven:
+
+mvn spring-boot:run
+
+
+A API ficara disponivel em:
+
+http://localhost:8080
+
+Estrutura de Pastas
+src/
+ └── main/
+     ├── java/
+     │    └── com.seuprojeto/
+     │         ├── controller/
+     │         │     ├── PostController.java
+     │         │     └── ComentarioController.java
+     │         ├── entity/
+     │         │     ├── Post.java
+     │         │     └── Comentario.java
+     │         ├── repository/
+     │         │     ├── PostRepository.java
+     │         │     └── ComentarioRepository.java
+     │         └── WorkshopApplication.java
+     └── resources/
+          ├── application.properties
+          └── data.sql (opcional)
